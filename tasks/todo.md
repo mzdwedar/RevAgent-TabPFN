@@ -63,7 +63,7 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
   - Verify: run it; numbers written to `results/api_probe.md`.
   - Depends: T3, preconditions. Files: `scripts/api_probe.py`, `results/api_probe.md`.
 
-- [ ] **T5: Sweep runner with a disk cache** · *M*
+- [x] **T5: Sweep runner with a disk cache** · *M*
   - `cache.py`: predictions stored by (dataset, arm, n, seed, config hash). `run.py` CLI:
     `--datasets --arms --sizes --seeds --profile {quick,full}`; writes long-format
     `results/raw/<dataset>.csv` (one row per dataset × arm × n × seed with every metric and
@@ -72,6 +72,7 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
     (1 dataset, 3 sizes, 2 seeds) finishes in minutes.
   - Verify: `uv run pytest tests/test_run.py` (fake client counts calls: 2nd run = 0);
     `make benchmark-quick` against the real API.
+  - Note: real-API `make benchmark-quick` deliberately not run yet; it spends quota, so it waits for Checkpoint A.
   - Depends: T3 (T4 for sizing). Files: `cache.py`, `run.py`, `Makefile`, `tests/test_run.py`.
 
 ### Checkpoint A (end of Fri 3 Oct)

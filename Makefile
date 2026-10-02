@@ -1,4 +1,4 @@
-.PHONY: setup test lint
+.PHONY: setup test lint benchmark-quick
 
 setup:
 	uv sync
@@ -8,3 +8,6 @@ lint:
 
 test: lint
 	uv run pytest
+
+benchmark-quick:
+	uv run python -m revbench.run --profile quick

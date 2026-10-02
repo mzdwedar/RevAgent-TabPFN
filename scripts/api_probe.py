@@ -13,25 +13,13 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from revbench.datasets import load
+from revbench.env import load_env
 from revbench.metrics import evaluate, timed
 from revbench.models import default_tabpfn_factory, fit_predict_proba
 from revbench.protocol import split, subsample
 
 ARMS = ("tabpfn", "tabpfn_thinking")
 OUT = Path("results/api_probe.md")
-
-
-def load_env(path: Path = Path(".env")) -> None:
-    """Export KEY=VALUE lines from `path` for variables not already set."""
-    if not path.exists():
-        return
-    for line in path.read_text().splitlines():
-        line = line.strip()
-        if line and not line.startswith("#") and "=" in line:
-            key, value = line.split("=", 1)
-            value = value.strip().strip("\"'")
-            if value:
-                os.environ.setdefault(key.strip(), value)
 
 
 def probe_arm(arm, X_train, y_train, X_test, y_test, factory) -> dict:
