@@ -34,7 +34,7 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
     tiny in-memory fixture (no network).
   - Depends: T0. Files: `datasets.py`, `DATASETS.md`, `tests/test_datasets.py`.
 
-- [ ] **T2: Evaluation protocol and metrics** · *S*
+- [x] **T2: Evaluation protocol and metrics** · *S*
   - `protocol.py`: stratified test split (30%, cap 2,000) per (dataset, seed); nested
     stratified training subsamples for n ∈ {50, 100, 200, 500, 1000, 2000, full}, each with
     ≥ 5 positives. `metrics.py`: PR-AUC, ROC-AUC, log-loss, ECE (10 bins), wall time.
