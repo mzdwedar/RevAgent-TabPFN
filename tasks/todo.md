@@ -23,7 +23,7 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
   - Verify: run both; `git status` shows no data or secrets tracked.
   - Depends: none. Files: `pyproject.toml`, `Makefile`, `LICENSE`, `.gitignore`, `tests/test_smoke.py`.
 
-- [ ] **T1: Public cohorts, fetched and pinned** · *S*
+- [x] **T1: Public cohorts, fetched and pinned** · *S*
   - `datasets.py`: fetch OpenML 40701 (`churn`) and 42178 (`telco-customer-churn`) via
     `fetch_openml`; drop ID columns; coerce `TotalCharges`; binary 0/1 target; keep string
     columns as strings. Write `data/manifest.json` (rows, churn rate, sha256 of the cleaned
