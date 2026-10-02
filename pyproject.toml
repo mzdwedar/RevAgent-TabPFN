@@ -1,0 +1,32 @@
+[project]
+name = "revbench"
+version = "0.1.0"
+description = "Can a new subscription app run a retention experiment on day one? TabPFN-3.5 learning curves on public churn data."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.12"
+dependencies = [
+    "tabpfn-client",
+    "scikit-learn",
+    "xgboost",
+    "optuna",
+    "pandas",
+    "matplotlib",
+]
+
+[dependency-groups]
+dev = ["pytest", "ruff"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/revbench"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
