@@ -72,13 +72,13 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
     (1 dataset, 3 sizes, 2 seeds) finishes in minutes.
   - Verify: `uv run pytest tests/test_run.py` (fake client counts calls: 2nd run = 0);
     `make benchmark-quick` against the real API.
-  - Note: real-API `make benchmark-quick` deliberately not run yet; it spends quota, so it waits for Checkpoint A.
+  - Note: real-API `make benchmark-quick` deliberately not run yet; ran after Checkpoint A (5 non-Thinking arms, 30 cells, 0 errors, ~100k tokens).
   - Depends: T3 (T4 for sizing). Files: `cache.py`, `run.py`, `Makefile`, `tests/test_run.py`.
 
 ### Checkpoint A (end of Fri 3 Oct)
 - [ ] `make test` green, offline
-- [ ] `make benchmark-quick` works against the real API
-- [ ] Credit budget sized from T4; full-sweep plan fits it (or is cut down now)
+- [x] `make benchmark-quick` works against the real API
+- [x] Credit budget sized from T4; full-sweep plan fits it (or is cut down now)
 - [ ] Review with you before spending the credits
 
 ---
