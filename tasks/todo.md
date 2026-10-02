@@ -85,11 +85,13 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
 
 ## Phase 2: Results (Sat 4 Oct)
 
-- [ ] **T6: Full sweep** · *S* (mostly wall-clock)
+- [x] **T6: Full sweep** · *S* (mostly wall-clock)
   - Run all cohorts × all arms × all sizes × 10 seeds; Thinking for n ≤ 500 × 5 seeds (or
     as sized at Checkpoint A).
   - Accept: `results/raw/*.csv` complete; error rows < 2% and listed in `results/summary.md`.
   - Verify: row counts match the planned grid; rerun makes zero calls.
+  - Done: 640 cells, 0 errors. Plain arms 10 seeds x 7 sizes (ordinal on telco only);
+    Thinking at n=200 only, seeds 0-4, both cohorts (~197k tokens/call). Total ~4.3M tokens.
   - Depends: T5, Checkpoint A. Files: `results/raw/*`.
 
 - [ ] **T7: Report and headline chart** · *M*
