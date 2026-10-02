@@ -55,7 +55,7 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
   - Verify: `uv run pytest tests/test_models.py` (offline).
   - Depends: T2. Files: `models.py`, `tests/test_models.py`, `tests/fakes.py`.
 
-- [ ] **T4: Real-API smoke test and cost check** · *XS* · **high risk — do early**
+- [x] **T4: Real-API smoke test and cost check** · *XS* · **high risk — do early**
   - One script: TabPFN-3.5 and Thinking on one cohort at n = 200, real API. Record latency,
     any credit/usage figure the API exposes, and errors in `results/api_probe.md`.
   - Accept: both arms return probabilities; a measured per-call cost/latency lets you size

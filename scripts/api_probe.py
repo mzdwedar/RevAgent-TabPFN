@@ -29,8 +29,9 @@ def load_env(path: Path = Path(".env")) -> None:
         line = line.strip()
         if line and not line.startswith("#") and "=" in line:
             key, value = line.split("=", 1)
-            if value.strip():
-                os.environ.setdefault(key.strip(), value.strip())
+            value = value.strip().strip("\"'")
+            if value:
+                os.environ.setdefault(key.strip(), value)
 
 
 def probe_arm(arm, X_train, y_train, X_test, y_test, factory) -> dict:

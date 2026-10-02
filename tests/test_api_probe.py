@@ -55,3 +55,14 @@ def test_load_env_sets_missing_vars_only(tmp_path, monkeypatch):
 
     assert os.environ["PROBE_A"] == "from_file"
     assert os.environ["PROBE_B"] == "from_env"
+
+
+def test_load_env_strips_surrounding_quotes(tmp_path, monkeypatch):
+    env = tmp_path / ".env"
+    env.write_text("PROBE_Q1=\"abc\"\nPROBE_Q2='def'\nPROBE_Q3=ghi\n")
+    for k in ("PROBE_Q1", "PROBE_Q2", "PROBE_Q3"):
+        monkeypatch.delenv(k, raising=False)
+    api_probe.load_env(env)
+    import os
+
+    assert [os.environ[k] for k in ("PROBE_Q1", "PROBE_Q2", "PROBE_Q3")] == ["abc", "def", "ghi"]
