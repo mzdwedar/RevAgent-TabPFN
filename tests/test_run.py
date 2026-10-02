@@ -78,3 +78,14 @@ def test_write_csv_long_format(tmp_path):
 def test_quick_profile_is_small():
     p = run.PROFILES["quick"]
     assert len(p["datasets"]) == 1 and len(p["sizes"]) == 3 and len(p["seeds"]) == 2
+
+
+def test_write_csv_merges_with_existing_rows(tmp_path):
+    rows = sweep(tmp_path, FakeTabPFNFactory(), arms=("logreg", "xgb"))
+    out = tmp_path / "raw"
+    run.write_csv([r for r in rows if r["arm"] == "logreg"], out)
+    run.write_csv([r for r in rows if r["arm"] == "xgb"], out)
+    run.write_csv([r for r in rows if r["arm"] == "xgb"], out)  # rewriting replaces, not duplicates
+    merged = pd.read_csv(out / "toy.csv")
+    assert len(merged) == len(rows) == 8
+    assert not merged.duplicated(["dataset", "arm", "n", "seed"]).any()

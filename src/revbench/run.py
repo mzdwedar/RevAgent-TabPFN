@@ -82,14 +82,17 @@ def sweep(
 
 
 def write_csv(rows: list[dict], out_dir: Path = RAW_DIR) -> dict[str, Path]:
-    """Write results/raw/<dataset>.csv, one long-format file per dataset."""
+    """Merge rows into results/raw/<dataset>.csv; a rerun cell replaces its earlier row."""
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    frame = pd.DataFrame(rows)
+    key = ["dataset", "arm", "n", "seed"]
     paths = {}
-    for name, part in frame.groupby("dataset", sort=False):
+    for name, part in pd.DataFrame(rows).groupby("dataset", sort=False):
         paths[name] = out_dir / f"{name}.csv"
-        part.to_csv(paths[name], index=False)
+        if paths[name].exists():
+            part = pd.concat([pd.read_csv(paths[name]), part], ignore_index=True)
+            part = part.drop_duplicates(key, keep="last")
+        part.sort_values(key, na_position="last").to_csv(paths[name], index=False)
     return paths
 
 
