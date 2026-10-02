@@ -44,7 +44,7 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
     against hand-computed values).
   - Depends: T1. Files: `protocol.py`, `metrics.py`, two tests.
 
-- [ ] **T3: Model arms behind one interface** · *M*
+- [x] **T3: Model arms behind one interface** · *M*
   - `models.py`: `fit_predict_proba(X_train, y_train, X_test) -> probs` for
     TabPFN-3.5 (raw columns), TabPFN-3.5 (ordinal-encoded), TabPFN-3.5-Thinking
     (`thinking_mode=True`, `thinking_metric` set for log-loss/AUC), XGBoost default,
