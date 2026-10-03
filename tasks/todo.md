@@ -164,6 +164,7 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
     entry shows as submitted on the platform.
   - Verify: the fresh-clone transcript; screenshot of the submitted entry.
   - Depends: Checkpoint C.
+  - Progress (3 Oct): fresh clone of the GitHub repo passes `make setup`, `make report` (no diff), `make demo`, `make test`. Video and final submit remain.
 
 ### Checkpoint D
 - [ ] Entry submitted before 15:00 CEST, 6 Oct
