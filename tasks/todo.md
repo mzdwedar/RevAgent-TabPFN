@@ -94,7 +94,7 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
     Thinking at n=200 only, seeds 0-4, both cohorts (~197k tokens/call). Total ~4.3M tokens.
   - Depends: T5, Checkpoint A. Files: `results/raw/*`.
 
-- [ ] **T7: Report and headline chart** · *M*
+- [x] **T7: Report and headline chart** · *M*
   - `report.py` (`make report`, no token needed): per cohort, PR-AUC and log-loss vs n with
     95% bands (log x-axis); calibration plot at n = 200; time-to-model table; raw-vs-ordinal
     ablation; `results/summary.md` with the one-sentence headline computed from the data
@@ -102,6 +102,8 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
   - Accept: `make report` regenerates every figure from committed CSVs alone.
   - Verify: delete `results/figures/`, run `make report`, figures reappear; read the
     headline against the CSV by hand once.
+  - Note: calibration figure is ECE vs n (reliability curves need per-row predictions, which
+    are not in the committed CSVs).
   - Depends: T6. Files: `report.py`, `results/figures/*`, `results/summary.md`.
 
 - [ ] **T8: Value-vs-budget curve** · *S*
