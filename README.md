@@ -70,7 +70,7 @@ Limits you should know about:
 
 ## Method
 
-- Cohorts (see [`DATASETS.md`](DATASETS.md)): OpenML 40701 (5,000 rows, 14.1% churn) and 42178 (Telco, 7,043 rows, 26.5% churn). Files are hash-pinned in `data/manifest.json`.
+- Cohorts (see [`DATASETS.md`](DATASETS.md)): OpenML 40701 (5,000 rows, 14.1% churn) and 42178 (Telco, 7,043 rows, 26.5% churn). Both are public. `make data` downloads them from OpenML (no account needed) into `data/`, and the files are hash-pinned in `data/manifest.json`.
 - Split: stratified 30% test set capped at 2,000 rows. Training sets are nested stratified subsamples with at least 5 positives, at n = 50, 100, 200, 500, 1000, 2000 and the full pool.
 - Metric: PR-AUC first, then ROC-AUC, log-loss and ECE. Predictions are cached per cell, so reruns cost nothing.
 - TabPFN-3.5 is used through the hosted `tabpfn-client`, with string and missing-value columns passed in raw. Telco also has an ordinal-encoded arm as an ablation.
@@ -80,6 +80,8 @@ Limits you should know about:
 
 This is the small, public-data version of an idea from RevAgent, a production-shaped retention agent.
 RevAgent: https://github.com/mzdwedar/RevAgent
+
+The full write-up of the idea, thesis, experiment and results is in [`docs/REPORT.md`](docs/REPORT.md).
 
 ## Licence
 
