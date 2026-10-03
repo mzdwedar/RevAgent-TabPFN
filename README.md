@@ -79,7 +79,7 @@ Limits you should know about:
 ## RevAgent
 
 This is the small, public-data version of an idea from RevAgent, a production-shaped retention agent.
-RevAgent: TODO add link.
+RevAgent: https://github.com/mzdwedar/RevAgent
 
 ## Licence
 
