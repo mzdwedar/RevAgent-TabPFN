@@ -79,3 +79,22 @@ def test_build_writes_figures_and_summary(tmp_path):
     assert (out / "figures" / "calibration_toy.png").exists()
     text = (out / "summary.md").read_text()
     assert "toy" in text and "Errors" in text
+
+
+def test_build_plots_value_curve_when_value_csv_exists(tmp_path):
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    frame(
+        tabpfn={50: [0.4, 0.5], 200: [0.6, 0.62]}, xgb_optuna={50: [0.3, 0.35], 200: [0.5, 0.52]}
+    ).to_csv(raw / "toy.csv", index=False)
+    rows = [
+        {"dataset": "toy", "arm": arm, "n": 200, "seed": seed, "save_rate": sr, "budget": b,
+         "net_value": 1.0, "per_1000": v}
+        for arm, v in (("tabpfn", 5.0), ("random", 1.0))
+        for seed in (0, 1) for sr in (0.1, 0.2) for b in (0.1, 0.2)
+    ]  # fmt: skip
+    pd.DataFrame(rows).to_csv(tmp_path / "value.csv", index=False)
+    out = tmp_path / "out"
+    report.build(raw, out, value_csv=tmp_path / "value.csv")
+    assert (out / "figures" / "value_toy.png").exists()
+    assert "Simulation" in (out / "summary.md").read_text()

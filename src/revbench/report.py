@@ -4,6 +4,7 @@ Reads only the committed `results/raw/*.csv`; no token or network needed.
 """
 
 import argparse
+import textwrap
 from pathlib import Path
 
 import matplotlib
@@ -13,6 +14,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy import stats
+
+from revbench import value as value_sim
 
 RAW_DIR = Path("results/raw")
 OUT_DIR = Path("results")
@@ -113,6 +116,35 @@ def _plot_curves(df, dataset, metrics, path, ylabel_by_metric, title):
     plt.close(fig)
 
 
+def _plot_value(vdf, dataset, path):
+    vdf = vdf[vdf["dataset"] == dataset]
+    rates = sorted(vdf["save_rate"].unique())
+    fig, axes = plt.subplots(1, len(rates), figsize=(4.6 * len(rates), 4.6), squeeze=False)
+    for ax, rate in zip(axes[0], rates, strict=True):
+        part = vdf[vdf["save_rate"] == rate]
+        for arm in [*value_sim.ARMS, value_sim.RANDOM]:
+            s = part[part["arm"] == arm].groupby("budget")["per_1000"].agg(["mean"]).reset_index()
+            if s.empty:
+                continue
+            ax.plot(
+                s["budget"] * 100, s["mean"], marker="o", ms=3,
+                ls=":" if arm == value_sim.RANDOM else "-",
+                label="Random targeting" if arm == value_sim.RANDOM else LABELS.get(arm, arm),
+            )  # fmt: skip
+        ax.axhline(0, color="black", lw=0.6)
+        ax.set_title(f"save rate {rate:.0%}")
+        ax.set_xlabel("% of customers targeted")
+        ax.grid(alpha=0.3)
+    axes[0][0].set_ylabel("net saved value per 1,000 customers")
+    axes[0][0].legend(fontsize=7)
+    n = int(vdf["n"].iloc[0])
+    fig.suptitle(f"{dataset}: value vs retention budget, models trained on {n} rows", y=0.99)
+    fig.text(0.5, 0.005, "\n".join(textwrap.wrap(value_sim.ASSUMPTIONS, 120)), ha="center", fontsize=7)
+    fig.tight_layout(rect=(0, 0.07, 1, 0.96))
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
+
+
 def _md_table(frame: pd.DataFrame) -> str:
     cols = list(frame.columns)
     lines = ["| " + " | ".join(cols) + " |", "|" + "---|" * len(cols)]
@@ -136,7 +168,9 @@ def _metric_table(df, dataset, n):
     return pd.DataFrame(rows)
 
 
-def build(raw_dir: Path = RAW_DIR, out_dir: Path = OUT_DIR) -> Path:
+def build(
+    raw_dir: Path = RAW_DIR, out_dir: Path = OUT_DIR, value_csv: Path = value_sim.VALUE_CSV
+) -> Path:
     raw_dir, out_dir = Path(raw_dir), Path(out_dir)
     (out_dir / "figures").mkdir(parents=True, exist_ok=True)
     df = pd.concat([pd.read_csv(p) for p in sorted(raw_dir.glob("*.csv"))], ignore_index=True)
@@ -158,6 +192,13 @@ def build(raw_dir: Path = RAW_DIR, out_dir: Path = OUT_DIR) -> Path:
         lines += [f"### Metrics at n = {HEADLINE_N}", "", _md_table(_metric_table(df, dataset, HEADLINE_N)), ""]
         lines += [f"### Time to model at the full pool (n = {pool:,})", ""]
         lines += [_md_table(_metric_table(df, dataset, pool)[["arm", "seconds"]]), ""]
+    value_csv = Path(value_csv)
+    if value_csv.exists():
+        vdf = pd.read_csv(value_csv)
+        lines += ["## Value vs retention budget", "", f"_{value_sim.ASSUMPTIONS}_", ""]
+        for dataset in vdf["dataset"].unique():
+            _plot_value(vdf, dataset, out_dir / "figures" / f"value_{dataset}.png")
+            lines += [f"![value {dataset}](figures/value_{dataset}.png)", ""]
     ab = ordinal_ablation(df)
     lines += ["## Ablation: raw strings vs ordinal encoding (PR-AUC, paired by seed)", ""]
     if ab.empty:

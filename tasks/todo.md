@@ -106,7 +106,7 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
     are not in the committed CSVs).
   - Depends: T6. Files: `report.py`, `results/figures/*`, `results/summary.md`.
 
-- [ ] **T8: Value-vs-budget curve** · *S*
+- [x] **T8: Value-vs-budget curve** · *S*
   - `value.py`: target the top k% by each arm's score; net saved value =
     Σ churners targeted × save rate × customer value − offers × offer cost. Customer value
     from `MonthlyCharges × 12` on Telco; stated constant elsewhere. Sweep save rate
@@ -114,6 +114,7 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
   - Accept: one figure per cohort at n = 200, assumptions printed on the figure.
   - Verify: `uv run pytest tests/test_value.py` (hand-checked toy case); `make report` includes it.
   - Depends: T6. Files: `value.py`, `report.py`, `tests/test_value.py`.
+  - Done: per-row predictions come from the gitignored cache via `make value`, which writes the committed `results/value.csv`; `make report` plots it. Budgets 5-50%, a random-targeting baseline added, offer cost 50, churn-cohort customer value 600 (both stated on the figure).
 
 ### Checkpoint B (end of Sat 4 Oct)
 - [ ] Headline chart exists and the headline sentence is true per the CSVs

@@ -31,3 +31,13 @@ class PredictionCache:
         path = self._path(dataset, arm, n, seed, config)
         path.parent.mkdir(parents=True, exist_ok=True)
         np.savez(path, proba=np.asarray(proba), seconds=seconds)
+
+    def lookup(self, dataset, arm, n, seed) -> np.ndarray:
+        """The cached probabilities for a cell whatever its config hash; error unless exactly one."""
+        hits = sorted(self.root.glob(f"{dataset}__{arm}__n{n}__s{seed}__*.npz"))
+        if len(hits) != 1:
+            raise FileNotFoundError(
+                f"{len(hits)} cached predictions for {dataset} {arm} n={n} seed={seed} in {self.root}"
+            )
+        with np.load(hits[0]) as f:
+            return f["proba"]
