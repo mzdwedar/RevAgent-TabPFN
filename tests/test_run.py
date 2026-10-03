@@ -89,3 +89,18 @@ def test_write_csv_merges_with_existing_rows(tmp_path):
     merged = pd.read_csv(out / "toy.csv")
     assert len(merged) == len(rows) == 8
     assert not merged.duplicated(["dataset", "arm", "n", "seed"]).any()
+
+
+def test_default_arms_exclude_the_expensive_thinking_arm():
+    assert "tabpfn_thinking" in run.ARMS and "tabpfn_thinking" not in run.DEFAULT_ARMS
+    assert set(run.DEFAULT_ARMS) < set(run.ARMS)
+
+
+def test_cli_writes_to_out_dir_leaving_committed_results_alone(tmp_path, monkeypatch):
+    make_data(tmp_path)
+    monkeypatch.setattr(run.cohorts, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(run, "PROFILES", {"quick": {"datasets": ["toy"], "sizes": [50], "seeds": [0]}})
+    monkeypatch.setattr(run, "sweep", lambda *a, **k: [
+        {"dataset": "toy", "arm": "logreg", "n": 50, "seed": 0, "error": ""}])
+    run.main(["--arms", "logreg", "--out-dir", str(tmp_path / "q")])
+    assert (tmp_path / "q" / "toy.csv").exists()

@@ -138,7 +138,7 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
   - Depends: T3 (and T6 cache for `--offline`). Files: `demo/agent.py`, `Makefile`, `tests/test_demo.py`.
   - Done: `make demo` replays the committed `demo/replay/telco_scores.csv` (5 live TabPFN-3.5 draws, each on its own 200-row sample; the spread is the uncertainty), `make demo-live` scores live, `--record` refreshes the replay. `make demo --offline` is not valid make syntax, so offline is the `make demo` default. Guardrails are listed text, not enforced.
 
-- [ ] **T10: README and submission text** · *S*
+- [x] **T10: README and submission text** · *S*
   - README order: pitch → headline chart → "run it in 5 minutes" (`make setup`,
     `make report`, `make demo --offline`, then with token `make benchmark-quick`) → results
     and honest limitations → method → link to RevAgent as the production-shaped version →

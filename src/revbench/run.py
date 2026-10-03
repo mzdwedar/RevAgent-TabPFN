@@ -16,6 +16,9 @@ from revbench.models import ARMS, fit_predict_proba
 RAW_DIR = Path("results/raw")
 METRICS = ("pr_auc", "roc_auc", "log_loss", "ece")
 
+# Thinking costs ~20x the tokens of a plain call and was only swept at n=200: opt in with --arms.
+DEFAULT_ARMS = tuple(a for a in ARMS if a != "tabpfn_thinking")
+
 PROFILES = {
     "quick": {"datasets": ["telco"], "sizes": [50, 200, 1000], "seeds": [0, 1]},
     "full": {
@@ -104,9 +107,10 @@ def main(argv: list[str] | None = None) -> None:
     p = argparse.ArgumentParser(prog="revbench.run")
     p.add_argument("--profile", choices=sorted(PROFILES), default="quick")
     p.add_argument("--datasets", help="comma-separated; default from profile")
-    p.add_argument("--arms", default=",".join(ARMS))
+    p.add_argument("--arms", default=",".join(DEFAULT_ARMS))
     p.add_argument("--sizes", help="comma-separated ints, or 'full' for the whole pool")
     p.add_argument("--seeds", help="comma-separated ints")
+    p.add_argument("--out-dir", type=Path, default=RAW_DIR)
     p.add_argument("--tune-budget-s", type=float, default=10.0)
     args = p.parse_args(argv)
     prof = PROFILES[args.profile]
@@ -116,7 +120,7 @@ def main(argv: list[str] | None = None) -> None:
     seeds = [int(s) for s in args.seeds.split(",")] if args.seeds else prof["seeds"]
     arms = args.arms.split(",")
     rows = sweep(names, arms, sizes, seeds, tune_budget_s=args.tune_budget_s)
-    for name, path in write_csv(rows).items():
+    for name, path in write_csv(rows, args.out_dir).items():
         print(f"{name}: wrote {path}")
     errors = [r for r in rows if r["error"]]
     print(f"{len(rows)} cells, {len(errors)} errors")
