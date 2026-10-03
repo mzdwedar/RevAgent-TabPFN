@@ -149,7 +149,7 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
   - Depends: T7, T8, T9. Files: `README.md`, `SUBMISSION.md`.
 
 ### Checkpoint C (end of Sun 5 Oct)
-- [ ] `make test`, `make report`, `make demo --offline` green
+- [x] `make test`, `make report`, `make demo` green (checked 3 Oct)
 - [ ] Push to a public GitHub repo and **submit a first entry tonight** (latest submission counts)
 
 ---
