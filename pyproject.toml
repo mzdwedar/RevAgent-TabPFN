@@ -26,7 +26,8 @@ packages = ["src/revbench"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["demo"]
 
 [tool.ruff]
 line-length = 100
-src = ["src", "tests"]
+src = ["src", "tests", "demo"]

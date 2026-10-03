@@ -117,14 +117,15 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
   - Done: per-row predictions come from the gitignored cache via `make value`, which writes the committed `results/value.csv`; `make report` plots it. Budgets 5-50%, a random-targeting baseline added, offer cost 50, churn-cohort customer value 600 (both stated on the figure).
 
 ### Checkpoint B (end of Sat 4 Oct)
-- [ ] Headline chart exists and the headline sentence is true per the CSVs
+- [x] Headline chart exists and the headline sentence is true per the CSVs
 - [ ] **Go/no-go on T12 (uplift):** go only if T9–T10 can still finish Sunday
+  - Decision so far: **defer**. Revisit after T10; T9 comes first.
 
 ---
 
 ## Phase 3: Demo and packaging (Sun 5 Oct)
 
-- [ ] **T9: Slim agent demo** · *M* · time-box: half a day
+- [x] **T9: Slim agent demo** · *M* · time-box: half a day
   - `demo/agent.py`, `make demo`: a trigger ("churn rate up 3 pts") → score a cohort with
     TabPFN-3.5 (live API, or `--offline` replaying cached scores) → pick the top-k targets
     with predicted saved value and uncertainty → draft an experiment (variant, 10% rollout,
@@ -135,6 +136,7 @@ the network (TabPFN is faked offline); no raw third-party rows committed outside
   - Verify: `uv run pytest tests/test_demo.py` (approve → 1 record; approve twice → still 1;
     reject → 0); run `make demo` by hand.
   - Depends: T3 (and T6 cache for `--offline`). Files: `demo/agent.py`, `Makefile`, `tests/test_demo.py`.
+  - Done: `make demo` replays the committed `demo/replay/telco_scores.csv` (5 live TabPFN-3.5 draws, each on its own 200-row sample; the spread is the uncertainty), `make demo-live` scores live, `--record` refreshes the replay. `make demo --offline` is not valid make syntax, so offline is the `make demo` default. Guardrails are listed text, not enforced.
 
 - [ ] **T10: README and submission text** · *S*
   - README order: pitch → headline chart → "run it in 5 minutes" (`make setup`,

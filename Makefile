@@ -1,4 +1,4 @@
-.PHONY: setup test lint benchmark-quick value report
+.PHONY: setup test lint benchmark-quick value report demo demo-live
 
 setup:
 	uv sync
@@ -17,3 +17,9 @@ value:
 
 report:
 	uv run python -m revbench.report
+
+demo:
+	uv run python demo/agent.py --offline
+
+demo-live:
+	uv run python demo/agent.py
